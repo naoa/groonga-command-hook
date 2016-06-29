@@ -57,6 +57,7 @@ command_hook_status(grn_ctx *ctx, GNUC_UNUSED int nargs, GNUC_UNUSED grn_obj **a
   unsigned int table_len = 0;
   char *column_name = NULL;
   unsigned int column_len = 0;
+  unsigned int i;
 
   var = grn_plugin_proc_get_var(ctx, user_data, "table", -1);
   if (GRN_TEXT_LEN(var) != 0) {
@@ -73,7 +74,31 @@ command_hook_status(grn_ctx *ctx, GNUC_UNUSED int nargs, GNUC_UNUSED grn_obj **a
   column = grn_obj_column(ctx, table, column_name, column_len);
 
   nhooks = grn_obj_get_nhooks(ctx, column, GRN_HOOK_SET);
+
+  grn_ctx_output_array_open(ctx, "HOOK", 2);
   grn_ctx_output_int32(ctx, nhooks);
+ 
+  grn_ctx_output_array_open(ctx, "HOOKS", nhooks);
+
+  if (nhooks) {
+    grn_obj *hook;
+    unsigned int i;
+    grn_obj data;
+    grn_obj buf;
+    GRN_TEXT_INIT(&buf, 0);
+    GRN_TEXT_INIT(&data, 0);
+    for (i = 0; i < nhooks; i++) {
+      GRN_BULK_REWIND(&buf);
+      GRN_BULK_REWIND(&data);
+      hook = grn_obj_get_hook(ctx, column, GRN_HOOK_SET, i, &data);
+      grn_inspect_name(ctx, &buf, hook);
+      grn_ctx_output_str(ctx, GRN_TEXT_VALUE(&buf), GRN_TEXT_LEN(&buf));
+    }
+    GRN_OBJ_FIN(ctx, &buf);
+    GRN_OBJ_FIN(ctx, &data);
+  }
+  grn_ctx_output_array_close(ctx);
+  grn_ctx_output_array_close(ctx);
 
   return NULL;
 }
