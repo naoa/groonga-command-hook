@@ -18,6 +18,6 @@ load --table Entries
 ]
 [[0,0.0,0.0],1]
 hook_status --table Entries --column title
-[[0,0.0,0.0],[1,["(nil)"]]]
-hook_delete --table Entries --column title
+[[0,0.0,0.0],[1,[["Tokens.entries_title","(nil)"]]]]
+hook_delete --table Entries --column title --no_target_only false
 [[0,0.0,0.0],0]

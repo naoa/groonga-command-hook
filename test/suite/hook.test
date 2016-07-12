@@ -14,5 +14,4 @@ load --table Entries
 ]
 
 hook_status --table Entries --column title
-hook_delete --table Entries --column title
-
+hook_delete --table Entries --column title --no_target_only false
