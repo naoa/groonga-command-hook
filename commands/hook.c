@@ -69,7 +69,7 @@ command_hook_delete(grn_ctx *ctx, GNUC_UNUSED int nargs, GNUC_UNUSED grn_obj **a
         hdata = (void *)GRN_TEXT_VALUE(&data);
         target = grn_ctx_at(ctx, hdata->target);
         grn_inspect_name(ctx, &buf, target);
-        if (GRN_TEXT_LEN(&buf) > 5 &&
+        if (GRN_TEXT_LEN(&buf) >= 5 &&
             !memcmp(GRN_TEXT_VALUE(&buf), "(nil)", 5)) {
           grn_obj_delete_hook(ctx, column, GRN_HOOK_SET, i);
         }
