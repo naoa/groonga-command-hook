@@ -72,6 +72,9 @@ command_hook_delete(grn_ctx *ctx, GNUC_UNUSED int nargs, GNUC_UNUSED grn_obj **a
         if (GRN_TEXT_LEN(&buf) >= 5 &&
             !memcmp(GRN_TEXT_VALUE(&buf), "(nil)", 5)) {
           grn_obj_delete_hook(ctx, column, GRN_HOOK_SET, i);
+        } else if (GRN_TEXT_LEN(&buf) >= 10 &&
+            !memcmp(GRN_TEXT_VALUE(&buf), "(anonymous", 10)) {
+          grn_obj_delete_hook(ctx, column, GRN_HOOK_SET, i);
         }
 
         GRN_BULK_REWIND(&buf);
